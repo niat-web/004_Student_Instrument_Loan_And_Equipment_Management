@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Instrument Loan Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <div>
+            <p class="eyebrow">Leveluxe Modern Music Academy</p>
+            <h1>Student Instrument Loan & Equipment Management</h1>
+        </div>
+        <div class="health-pill" id="healthStatus">Checking server</div>
+    </header>
+
+    <main class="app-shell">
+        <aside class="sidebar" aria-label="Primary">
+            <button class="nav-btn active" data-view="dashboardView">Dashboard</button>
+            <button class="nav-btn" data-view="inventoryView">Inventory</button>
+            <button class="nav-btn" data-view="loansView">Active Loans</button>
+            <button class="nav-btn" data-view="overdueView">Overdue</button>
+            <button class="nav-btn" data-view="reportsView">Reports</button>
+        </aside>
+
+        <section class="content">
+            <div class="notice" id="notice" hidden></div>
+
+            <section class="view active" id="dashboardView">
+                <div class="view-head">
+                    <div>
+                        <p class="breadcrumb">Dashboard</p>
+                        <h2>Availability and deposit overview</h2>
+                    </div>
+                    <button class="primary-btn" data-open="instrumentModal">Add Instrument</button>
+                </div>
+
+                <div class="metric-grid" id="metricGrid"></div>
+
+                <div class="split-layout">
+                    <section class="panel">
+                        <div class="panel-head">
+                            <h3>Status Distribution</h3>
+                        </div>
+                        <div class="status-bars" id="statusBars"></div>
+                    </section>
+                    <section class="panel alert-panel">
+                        <div class="panel-head">
+                            <h3>Overdue Recovery List</h3>
+                            <button class="text-btn" data-view-link="overdueView">View all</button>
+                        </div>
+                        <div id="dashboardOverdue"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="view" id="inventoryView">
+                <div class="view-head">
+                    <div>
+                        <p class="breadcrumb">Inventory</p>
+                        <h2>Instrument roster</h2>
+                    </div>
+                    <div class="toolbar">
+                        <select id="statusFilter" aria-label="Filter by status">
+                            <option value="">All statuses</option>
+                            <option>Available</option>
+                            <option>On Loan</option>
+                            <option>Under Repair</option>
+                        </select>
+                        <button class="primary-btn" data-open="instrumentModal">Add Instrument</button>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Brand</th>
+                                <th>Serial No.</th>
+                                <th>Condition</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="view" id="loansView">
+                <div class="view-head">
+                    <div>
+                        <p class="breadcrumb">Loans</p>
+                        <h2>Active loan dashboard</h2>
+                    </div>
+                </div>
+                <div class="cards-list" id="activeLoansList"></div>
+            </section>
+
+            <section class="view" id="overdueView">
+                <div class="view-head">
+                    <div>
+                        <p class="breadcrumb">Recovery</p>
+                        <h2>Overdue loans</h2>
+                    </div>
+                </div>
+                <div class="cards-list" id="overdueList"></div>
+            </section>
+
+            <section class="view" id="reportsView">
+                <div class="view-head">
+                    <div>
+                        <p class="breadcrumb">Reports</p>
+                        <h2>Deposit and return summary</h2>
+                    </div>
+                    <div class="toolbar">
+                        <input type="date" id="reportStart" aria-label="Report start date">
+                        <input type="date" id="reportEnd" aria-label="Report end date">
+                        <button class="secondary-btn" id="exportCsvBtn">Export CSV</button>
+                    </div>
+                </div>
+                <div class="metric-grid compact" id="reportMetrics"></div>
+                <section class="panel">
+                    <div class="panel-head">
+                        <h3>Monthly Deposit Collections</h3>
+                    </div>
+                    <div class="chart" id="depositChart"></div>
+                </section>
+            </section>
+        </section>
+    </main>
+
+    <div class="modal" id="instrumentModal" aria-hidden="true">
+        <form class="modal-card" id="instrumentForm">
+            <div class="modal-head">
+                <h3 id="instrumentModalTitle">Add Instrument</h3>
+                <button type="button" class="icon-btn" data-close>&times;</button>
+            </div>
+            <input type="hidden" id="instrumentId">
+            <div class="form-grid">
+               <label>Instrument Type
+                  <input id="instrumentType" list="type-suggestions" required maxlength="100" placeholder="e.g., Guitar">
+                  <datalist id="type-suggestions">
+                      <option value="Acoustic Guitar">
+                      <option value="Electric Guitar">
+                      <option value="Keyboard">
+                      <option value="Violin">
+                      <option value="Drum Kit">
+                  </datalist>
+                </label>
+                <label>Brand<input id="instrumentBrand" required maxlength="100" placeholder="Yamaha"></label>
+                <label>Serial Number<input id="instrumentSerial" required maxlength="100" placeholder="LVX-GTR-1001"></label>
+                <label>Condition
+                    <select id="instrumentCondition" required>
+                        <option>Excellent</option>
+                        <option>Good</option>
+                        <option>Fair</option>
+                    </select>
+                </label>
+                <label>Status
+                    <select id="instrumentStatus" required>
+                        <option>Available</option>
+                        <option>On Loan</option>
+                        <option>Under Repair</option>
+                    </select>
+                </label>
+                <label class="wide">Notes<textarea id="instrumentNotes" rows="3" placeholder="Maintenance notes or accessories"></textarea></label>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="secondary-btn" data-close>Cancel</button>
+                <button class="primary-btn" type="submit">Save Instrument</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal" id="loanModal" aria-hidden="true">
+        <form class="modal-card" id="loanForm">
+            <div class="modal-head">
+                <h3>Log New Loan</h3>
+                <button type="button" class="icon-btn" data-close>&times;</button>
+            </div>
+            <input type="hidden" id="loanInstrumentId">
+            <p class="selected-record" id="selectedInstrument"></p>
+            <div class="form-grid">
+                <label>Student Name<input id="studentName" required maxlength="150"></label>
+                <label>Student Phone<input id="studentPhone" type="tel" pattern="[0-9]{10}" required    placeholder="9876543210">
+                </label>
+                <label>Loan Date<input id="loanDate" type="date" required></label>
+                <label>Expected Return Date<input id="expectedReturnDate" type="date" required></label>
+                <label>Deposit Collected (Rs)<input id="depositCollected" type="number" min="0" step="0.01" required></label>
+                <label class="wide">Condition at Loan<textarea id="conditionAtLoan" rows="3" required placeholder="Document scratches, missing accessories, or photo notes"></textarea></label>
+                <label class="wide">Optional Photo URL<input id="conditionPhotoUrl" type="url" placeholder="https://..."></label>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="secondary-btn" data-close>Cancel</button>
+                <button class="primary-btn" type="submit">Create Loan</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal" id="returnModal" aria-hidden="true">
+        <form class="modal-card" id="returnForm">
+            <div class="modal-head">
+                <h3>Return & Damage Assessment</h3>
+                <button type="button" class="icon-btn" data-close>&times;</button>
+            </div>
+            <input type="hidden" id="returnLoanId">
+            <p class="selected-record" id="selectedLoan"></p>
+            <div class="refund-box">
+                <span>Calculated Refund</span>
+                <strong id="refundPreview">Rs 0.00</strong>
+            </div>
+            <div class="form-grid">
+                <label>Return Date<input id="actualReturnDate" type="date" required></label>
+                <label>Damage Deduction (Rs)<input id="damageDeduction" type="number" min="0" step="0.01" value="0" required></label>
+                <label>Instrument Status
+                    <select id="returnInstrumentStatus" required>
+                        <option>Available</option>
+                        <option>Under Repair</option>
+                    </select>
+                </label>
+                <label class="wide">Condition at Return<textarea id="conditionAtReturn" rows="3" required></textarea></label>
+                <label class="wide">Damage Notes<textarea id="damageNotes" rows="3" placeholder="Reason for deduction, if any"></textarea></label>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="secondary-btn" data-close>Cancel</button>
+                <button class="primary-btn" type="submit">Complete Return</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
