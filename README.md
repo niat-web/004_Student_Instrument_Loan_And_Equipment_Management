@@ -143,4 +143,4 @@ Sample condition ratings include:
 
 ## Project Outcome
 
-# This project provides a working prototype for managing student instrument loans at Leveluxe Modern Music Academy. It replaces manual tracking with a digital workflow for inventory availability, active loans, overdue recovery, damage assessment, and deposit refund calculation.
+#### This project provides a working prototype for managing student instrument loans at Leveluxe Modern Music Academy. It replaces manual tracking with a digital workflow for inventory availability, active loans, overdue recovery, damage assessment, and deposit refund calculation.
