@@ -22,7 +22,7 @@ Leveluxe Modern Music Academy lends instruments and audio equipment to students.
 | ---------- | --------------------- |
 | Frontend   | HTML, CSS, JavaScript |
 | Backend    | Python Flask          |
-| Database   | SQLite                |
+| Database   | PostgreSQL            |
 | ORM        | Flask-SQLAlchemy      |
 | API Access | Fetch API, JSON       |
 
@@ -70,7 +70,7 @@ The backend also serves the frontend, so no separate frontend server is required
 Use this URL to confirm the backend is running:
 
 ```text
-http://127.0.0.1:5000/health
+http://127.0.0.1:8081/health
 ```
 
 Expected response:
